@@ -11,6 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
 import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_architecture_showcase/core/database/app_drift_database.dart'
+    as _i666;
+import 'package:flutter_architecture_showcase/core/database/database_module.dart'
+    as _i640;
 import 'package:flutter_architecture_showcase/core/network/network_module.dart'
     as _i728;
 import 'package:get_it/get_it.dart' as _i174;
@@ -23,10 +27,14 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final databaseModule = _$DatabaseModule();
     final networkModule = _$NetworkModule();
+    gh.lazySingleton<_i666.AppDriftDatabase>(() => databaseModule.database);
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio);
     return this;
   }
 }
+
+class _$DatabaseModule extends _i640.DatabaseModule {}
 
 class _$NetworkModule extends _i728.NetworkModule {}
