@@ -13,6 +13,11 @@ LazyDatabase createDatabaseConnection() {
       p.join(directory.path, 'flutter_architecture_showcase.sqlite'),
     );
 
-    return NativeDatabase.createInBackground(file);
+    return NativeDatabase.createInBackground(
+      file,
+      setup: (database) {
+        database.execute('PRAGMA foreign_keys = ON');
+      },
+    );
   });
 }
