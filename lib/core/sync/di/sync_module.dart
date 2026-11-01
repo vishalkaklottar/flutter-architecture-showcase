@@ -1,4 +1,5 @@
 import 'package:flutter_architecture_showcase/core/sync/domain/handlers/sync_category_handler.dart';
+import 'package:flutter_architecture_showcase/features/products/data/services/product_sync_category_handler.dart';
 import 'package:injectable/injectable.dart';
 
 import '../domain/entities/sync_retry_policy.dart';
@@ -9,7 +10,9 @@ abstract class SyncModule {
   SyncRetryPolicy get syncRetryPolicy => SyncRetryPolicy();
 
   @lazySingleton
-  List<SyncCategoryHandler> syncCategoryHandlers() {
-    return <SyncCategoryHandler>[];
+  List<SyncCategoryHandler> syncCategoryHandlers(
+    ProductSyncCategoryHandler productHandler,
+  ) {
+    return <SyncCategoryHandler>[productHandler];
   }
 }

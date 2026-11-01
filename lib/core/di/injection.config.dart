@@ -17,6 +17,8 @@ import 'package:flutter_architecture_showcase/core/database/database_module.dart
     as _i640;
 import 'package:flutter_architecture_showcase/core/network/network_module.dart'
     as _i728;
+import 'package:flutter_architecture_showcase/core/sync/data/repositories/drift_sync_metadata_repository.dart'
+    as _i143;
 import 'package:flutter_architecture_showcase/core/sync/data/repositories/drift_sync_queue_repository.dart'
     as _i844;
 import 'package:flutter_architecture_showcase/core/sync/data/services/sync_coordinator_impl.dart'
@@ -29,14 +31,22 @@ import 'package:flutter_architecture_showcase/core/sync/domain/handlers/sync_cat
     as _i839;
 import 'package:flutter_architecture_showcase/core/sync/domain/repositories/sync_coordinator.dart'
     as _i228;
+import 'package:flutter_architecture_showcase/core/sync/domain/repositories/sync_metadata_repository.dart'
+    as _i676;
 import 'package:flutter_architecture_showcase/core/sync/domain/repositories/sync_queue_repository.dart'
     as _i210;
 import 'package:flutter_architecture_showcase/features/products/data/datasources/local/drift_product_local_datasource.dart'
     as _i22;
 import 'package:flutter_architecture_showcase/features/products/data/datasources/local/product_local_datasource.dart'
     as _i321;
+import 'package:flutter_architecture_showcase/features/products/data/datasources/remote/mock_product_remote_data_source.dart'
+    as _i860;
+import 'package:flutter_architecture_showcase/features/products/data/datasources/remote/product_remote_data_source.dart'
+    as _i157;
 import 'package:flutter_architecture_showcase/features/products/data/repositories/product_repository_impl.dart'
     as _i427;
+import 'package:flutter_architecture_showcase/features/products/data/services/product_sync_category_handler.dart'
+    as _i1034;
 import 'package:flutter_architecture_showcase/features/products/domain/repositories/product_repository.dart'
     as _i600;
 import 'package:get_it/get_it.dart' as _i174;
@@ -55,27 +65,42 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i666.AppDriftDatabase>(() => databaseModule.database);
     gh.lazySingleton<_i361.Dio>(() => networkModule.dio);
     gh.lazySingleton<_i39.SyncRetryPolicy>(() => syncModule.syncRetryPolicy);
-    gh.lazySingleton<List<_i839.SyncCategoryHandler>>(
-      () => syncModule.syncCategoryHandlers(),
+    gh.lazySingleton<_i157.ProductRemoteDataSource>(
+      () => _i860.MockProductRemoteDataSource(),
     );
     gh.lazySingleton<_i210.SyncQueueRepository>(
       () => _i844.DriftSyncQueueRepository(gh<_i666.AppDriftDatabase>()),
     );
-    gh.lazySingleton<_i228.SyncCoordinator>(
-      () => _i808.SyncCoordinatorImpl(
-        queueRepository: gh<_i210.SyncQueueRepository>(),
-        handlers: gh<List<_i839.SyncCategoryHandler>>(),
-        retryPolicy: gh<_i39.SyncRetryPolicy>(),
-      ),
-    );
     gh.lazySingleton<_i321.ProductLocalDataSource>(
       () => _i22.DriftProductLocalDataSource(gh<_i666.AppDriftDatabase>()),
+    );
+    gh.lazySingleton<_i676.SyncMetadataRepository>(
+      () => _i143.DriftSyncMetadataRepository(gh<_i666.AppDriftDatabase>()),
     );
     gh.lazySingleton<_i600.ProductRepository>(
       () => _i427.ProductRepositoryImpl(
         gh<_i666.AppDriftDatabase>(),
         gh<_i321.ProductLocalDataSource>(),
         gh<_i210.SyncQueueRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i1034.ProductSyncCategoryHandler>(
+      () => _i1034.ProductSyncCategoryHandler(
+        localDataSource: gh<_i321.ProductLocalDataSource>(),
+        remoteDataSource: gh<_i157.ProductRemoteDataSource>(),
+        metadataRepository: gh<_i676.SyncMetadataRepository>(),
+      ),
+    );
+    gh.lazySingleton<List<_i839.SyncCategoryHandler>>(
+      () => syncModule.syncCategoryHandlers(
+        gh<_i1034.ProductSyncCategoryHandler>(),
+      ),
+    );
+    gh.lazySingleton<_i228.SyncCoordinator>(
+      () => _i808.SyncCoordinatorImpl(
+        queueRepository: gh<_i210.SyncQueueRepository>(),
+        handlers: gh<List<_i839.SyncCategoryHandler>>(),
+        retryPolicy: gh<_i39.SyncRetryPolicy>(),
       ),
     );
     return this;
