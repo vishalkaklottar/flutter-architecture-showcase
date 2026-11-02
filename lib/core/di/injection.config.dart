@@ -35,6 +35,18 @@ import 'package:flutter_architecture_showcase/core/sync/domain/repositories/sync
     as _i676;
 import 'package:flutter_architecture_showcase/core/sync/domain/repositories/sync_queue_repository.dart'
     as _i210;
+import 'package:flutter_architecture_showcase/features/products/application/commands/create_product_command.dart'
+    as _i238;
+import 'package:flutter_architecture_showcase/features/products/application/commands/delete_product_command.dart'
+    as _i380;
+import 'package:flutter_architecture_showcase/features/products/application/commands/update_product_command.dart'
+    as _i225;
+import 'package:flutter_architecture_showcase/features/products/application/queries/get_product_by_id_query.dart'
+    as _i230;
+import 'package:flutter_architecture_showcase/features/products/application/queries/get_products_query.dart'
+    as _i384;
+import 'package:flutter_architecture_showcase/features/products/application/queries/watch_products_query.dart'
+    as _i900;
 import 'package:flutter_architecture_showcase/features/products/data/datasources/local/drift_product_local_datasource.dart'
     as _i22;
 import 'package:flutter_architecture_showcase/features/products/data/datasources/local/product_local_datasource.dart'
@@ -49,6 +61,8 @@ import 'package:flutter_architecture_showcase/features/products/data/services/pr
     as _i1034;
 import 'package:flutter_architecture_showcase/features/products/domain/repositories/product_repository.dart'
     as _i600;
+import 'package:flutter_architecture_showcase/features/products/presentation/cubit/product_cubit.dart'
+    as _i193;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -96,11 +110,37 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1034.ProductSyncCategoryHandler>(),
       ),
     );
+    gh.lazySingleton<_i238.CreateProductCommand>(
+      () => _i238.CreateProductCommand(gh<_i600.ProductRepository>()),
+    );
+    gh.lazySingleton<_i380.DeleteProductCommand>(
+      () => _i380.DeleteProductCommand(gh<_i600.ProductRepository>()),
+    );
+    gh.lazySingleton<_i225.UpdateProductCommand>(
+      () => _i225.UpdateProductCommand(gh<_i600.ProductRepository>()),
+    );
+    gh.lazySingleton<_i230.GetProductByIdQuery>(
+      () => _i230.GetProductByIdQuery(gh<_i600.ProductRepository>()),
+    );
+    gh.lazySingleton<_i384.GetProductsQuery>(
+      () => _i384.GetProductsQuery(gh<_i600.ProductRepository>()),
+    );
+    gh.lazySingleton<_i900.WatchProductsQuery>(
+      () => _i900.WatchProductsQuery(gh<_i600.ProductRepository>()),
+    );
     gh.lazySingleton<_i228.SyncCoordinator>(
       () => _i808.SyncCoordinatorImpl(
         queueRepository: gh<_i210.SyncQueueRepository>(),
         handlers: gh<List<_i839.SyncCategoryHandler>>(),
         retryPolicy: gh<_i39.SyncRetryPolicy>(),
+      ),
+    );
+    gh.factory<_i193.ProductCubit>(
+      () => _i193.ProductCubit(
+        createProduct: gh<_i238.CreateProductCommand>(),
+        updateProduct: gh<_i225.UpdateProductCommand>(),
+        deleteProduct: gh<_i380.DeleteProductCommand>(),
+        watchProducts: gh<_i900.WatchProductsQuery>(),
       ),
     );
     return this;

@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:math';
 
+import 'package:flutter_architecture_showcase/core/utils/id_generator.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/database/app_drift_database.dart';
@@ -13,7 +13,7 @@ import '../models/product_model.dart';
 
 @LazySingleton(as: ProductRepository)
 class ProductRepositoryImpl implements ProductRepository {
-  ProductRepositoryImpl(
+  const ProductRepositoryImpl(
     this._database,
     this._localDataSource,
     this._syncQueueRepository,
@@ -26,15 +26,7 @@ class ProductRepositoryImpl implements ProductRepository {
   static const String _entityType = 'product';
 
   String _generateOperationId() {
-    final random = Random.secure();
-
-    final timestamp = DateTime.now().microsecondsSinceEpoch;
-    final randomPart = List.generate(
-      16,
-      (_) => random.nextInt(16).toRadixString(16),
-    ).join();
-
-    return 'product_$timestamp$randomPart';
+    return 'product_${IdGenerator.generate()}';
   }
 
   @override
