@@ -59,9 +59,10 @@ lib/
 │       ├── domain/
 │       │   ├── entities/
 │       │   ├── repositories/
-│       │   ├── commands/
-│       │   ├── queries/
-│       │   └── handlers/
+        ├── application/
+        │   ├── commands/
+        │   ├── queries/
+        │   └── handlers/
 │       └── presentation/
 │           ├── bloc/
 │           ├── screens/
