@@ -21,7 +21,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Future<void> _editProduct(Product product) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => ProductFormScreen(product: product),
+        builder: (_) => BlocProvider.value(
+          value: context.read<ProductCubit>(),
+          child: ProductFormScreen(product: product),
+        ),
       ),
     );
   }

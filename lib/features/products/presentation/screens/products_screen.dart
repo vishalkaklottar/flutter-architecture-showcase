@@ -26,7 +26,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Future<void> _openProductForm({Product? product}) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => ProductFormScreen(product: product),
+        builder: (_) => BlocProvider.value(
+          value: context.read<ProductCubit>(),
+          child: ProductFormScreen(product: product),
+        ),
       ),
     );
   }
@@ -34,7 +37,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Future<void> _openProductDetails(Product product) async {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => ProductDetailsScreen(product: product),
+        builder: (_) => BlocProvider.value(
+          value: context.read<ProductCubit>(),
+          child: ProductDetailsScreen(product: product),
+        ),
       ),
     );
   }
