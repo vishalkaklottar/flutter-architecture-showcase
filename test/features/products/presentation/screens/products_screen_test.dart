@@ -236,15 +236,10 @@ void main() {
       verify(() => syncCubit.synchronize()).called(1);
     });
 
-    testWidgets('shows progress indicator while synchronizing', (
-        tester,
-        ) async {
+    testWidgets('shows progress indicator while synchronizing', (tester) async {
       await tester.pumpWidget(createWidget());
 
-      await emitSyncState(
-        tester,
-        const SyncState(status: SyncStatus.running),
-      );
+      await emitSyncState(tester, const SyncState(status: SyncStatus.running));
 
       expect(find.byTooltip('Synchronizing...'), findsOneWidget);
 

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter_architecture_showcase/core/sync/domain/repositories/sync_coordinator.dart';
@@ -60,7 +59,7 @@ void main() {
       act: (cubit) => cubit.synchronize(),
       expect: () => [
         isA<SyncState>().having(
-              (state) => state.status,
+          (state) => state.status,
           'status',
           SyncStatus.running,
         ),
@@ -68,9 +67,9 @@ void main() {
             .having((state) => state.status, 'status', SyncStatus.failure)
             .having(
               (state) => state.errorMessage,
-          'errorMessage',
-          'Exception: Network error',
-        )
+              'errorMessage',
+              'Exception: Network error',
+            )
             .having((state) => state.isRunning, 'isRunning', isFalse),
       ],
       verify: (_) {
@@ -81,8 +80,7 @@ void main() {
     test('ignores duplicate synchronization requests', () async {
       final completer = Completer<void>();
 
-      when(() => coordinator.synchronize())
-          .thenAnswer((_) => completer.future);
+      when(() => coordinator.synchronize()).thenAnswer((_) => completer.future);
 
       final cubit = SyncCubit(coordinator);
 
@@ -124,7 +122,7 @@ void main() {
       },
       expect: () => [
         isA<SyncState>().having(
-              (state) => state.status,
+          (state) => state.status,
           'status',
           SyncStatus.running,
         ),
@@ -132,9 +130,9 @@ void main() {
             .having((state) => state.status, 'status', SyncStatus.failure)
             .having(
               (state) => state.errorMessage,
-          'errorMessage',
-          'Exception: Network error',
-        ),
+              'errorMessage',
+              'Exception: Network error',
+            ),
         isA<SyncState>()
             .having((state) => state.status, 'status', SyncStatus.running)
             .having((state) => state.errorMessage, 'errorMessage', isNull),
