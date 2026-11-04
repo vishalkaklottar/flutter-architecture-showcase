@@ -63,6 +63,8 @@ import 'package:flutter_architecture_showcase/features/products/domain/repositor
     as _i600;
 import 'package:flutter_architecture_showcase/features/products/presentation/cubit/product_cubit.dart'
     as _i193;
+import 'package:flutter_architecture_showcase/features/sync/presentation/cubit/sync_cubit.dart'
+    as _i592;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -142,6 +144,9 @@ extension GetItInjectableX on _i174.GetIt {
         deleteProduct: gh<_i380.DeleteProductCommand>(),
         watchProducts: gh<_i900.WatchProductsQuery>(),
       ),
+    );
+    gh.factory<_i592.SyncCubit>(
+      () => _i592.SyncCubit(gh<_i228.SyncCoordinator>()),
     );
     return this;
   }
